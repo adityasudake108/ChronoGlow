@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#171a21">
+  <title>ChronoGlow</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div id="particles-js"></div>
+  
+  <div class="container">
+    <div class="battery-status top-right">
+      <span id="battery-level">38%</span>
+      <div class="battery-icon">
+        <div class="battery-level-indicator"></div>
+      </div>
+    </div>
+    
+    <h1>Digital Clock</h1>
+    
+    <div id="digital-time">05:14:37 <span class="period">PM</span></div>
+    
+    <div class="controls-wrapper">
+      <div class="format-toggle">
+        <span>24h</span>
+        <label class="switch">
+          <input type="checkbox" id="format-switch">
+          <span class="slider round"></span>
+        </label>
+        <span>12h</span>
+      </div>
+    </div>
+    
+    <div class="clock-labels">
+      <div class="label">HOURS</div>
+      <div class="label">MINUTES</div>
+      <div class="label">SECONDS</div>
+    </div>
+      <div class="clock-container">
+      <div class="time-section hours">
+        <div class="digit-column">
+          <div class="digit-slider" id="hours-tens"></div>
+          <div class="digit-highlight"></div>
+        </div>
+        <div class="digit-column">
+          <div class="digit-slider" id="hours-ones"></div>
+          <div class="digit-highlight"></div>
+        </div>
+      </div>
+      
+      <div class="separator">
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      
+      <div class="time-section minutes">
+        <div class="digit-column">
+          <div class="digit-slider" id="minutes-tens"></div>
+          <div class="digit-highlight"></div>
+        </div>
+        <div class="digit-column">
+          <div class="digit-slider" id="minutes-ones"></div>
+          <div class="digit-highlight"></div>
+        </div>
+      </div>
+      
+      <div class="separator">
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      
+      <div class="time-section seconds">
+        <div class="digit-column">
+          <div class="digit-slider" id="seconds-tens"></div>
+          <div class="digit-highlight"></div>
+        </div>
+        <div class="digit-column">
+          <div class="digit-slider" id="seconds-ones"></div>
+          <div class="digit-highlight"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="date-display">
+      <span id="current-date">Saturday, June 14, 2025</span>
+    </div>
+      <div class="footer">
+      <div class="control-buttons">
+        <button id="theme-btn" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+        <button id="battery-saver-btn" title="Battery Saver Mode"><i class="fas fa-battery-half"></i></button>
+        <button id="fullscreen-btn" title="Enter Fullscreen"><i class="fas fa-expand"></i></button>
+        <button id="screensaver-btn" title="Screensaver Mode"><i class="fas fa-tv"></i></button>
+      </div>
+    </div>
+    
+    <div class="screensaver-overlay">
+      <div class="tap-instructions">Tap anywhere to show controls</div>
+    </div>
+  </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
