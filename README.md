@@ -16,7 +16,7 @@
 - **Prevent Screen Sleep:** Keeps your display on when in screensaver mode
 
 ## 🚀 Demo
-Check out the live demo: **[ChronoGlow Demo](#)**
+Check out the live demo: **[ChronoGlow Demo](https://chronoglow.onrender.com)**
 
 <!-- ## 📱 Screenshots
 <div style="display: flex; justify-content: space-between;">
