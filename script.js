@@ -174,8 +174,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   // Screensaver functionality
   function activateScreensaver() {
+    console.log('Activating screensaver');
     isScreensaverActive = true;
     body.classList.add('screensaver-active');
+    body.classList.remove('show-controls'); // Ensure controls are hidden initially
     requestWakeLock();
 
     // Hide cursor after inactivity
@@ -183,17 +185,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show tap instructions briefly
     const overlay = document.querySelector('.screensaver-overlay');
-    overlay.style.display = 'flex';
+    if (overlay) {
+      overlay.style.display = 'flex';
+      overlay.style.pointerEvents = 'auto'; // Enable clicks on overlay
+      console.log('Overlay displayed');
 
-    // Hide controls immediately (remove any previously added show-controls class)
-    body.classList.remove('show-controls');
+      // Bind overlay click/touch events to deactivate screensaver
+      overlay.onclick = () => {
+        console.log('Overlay clicked, deactivating screensaver');
+        deactivateScreensaver();
+      };
+      overlay.ontouchstart = () => {
+        console.log('Overlay touched, deactivating screensaver');
+        deactivateScreensaver();
+      };
+    } else {
+      console.error('Screensaver overlay not found');
+    }
 
-    // Update screensaver button
+    // Ensure screensaver button remains visible by overriding CSS
+    screensaverBtn.style.display = 'block';
+    screensaverBtn.style.opacity = '1';
+    screensaverBtn.style.pointerEvents = 'auto';
+    screensaverBtn.style.zIndex = '1001'; // Ensure it is above overlay
     screensaverBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
     screensaverBtn.title = 'Exit Screensaver Mode';
   }
-  
+
   function deactivateScreensaver() {
+    console.log('Deactivating screensaver');
     isScreensaverActive = false;
     body.classList.remove('screensaver-active');
     releaseWakeLock();
@@ -203,9 +223,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hide overlay
     const overlay = document.querySelector('.screensaver-overlay');
-    overlay.style.display = 'none';
+    if (overlay) {
+      overlay.style.display = 'none';
+      overlay.style.pointerEvents = 'none'; // Reset pointer events
+      console.log('Overlay hidden');
 
-    // Update screensaver button
+      // Remove overlay click/touch events
+      overlay.onclick = null;
+      overlay.ontouchstart = null;
+    } else {
+      console.error('Screensaver overlay not found');
+    }
+
+    // Update screensaver button and reset inline styles
+    screensaverBtn.style.display = 'block';
+    screensaverBtn.style.opacity = '';
+    screensaverBtn.style.pointerEvents = '';
+    screensaverBtn.style.zIndex = '';
     screensaverBtn.innerHTML = '<i class="fas fa-tv"></i>';
     screensaverBtn.title = 'Screensaver Mode';
   }
@@ -217,12 +251,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isScreensaverActive) {
       // When in screensaver mode, show controls temporarily
       document.body.style.cursor = '';
+      body.classList.add('show-controls');
       
       // Hide controls after 3 seconds of inactivity
       inactivityTimer = setTimeout(() => {
         document.body.style.cursor = 'none';
-        // Remove the show-controls class to hide the controls again
         body.classList.remove('show-controls');
+        
+        // Show the overlay again after controls are hidden
+        const overlay = document.querySelector('.screensaver-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+        }
       }, 3000);
     }
   }
@@ -286,27 +326,41 @@ document.addEventListener('DOMContentLoaded', () => {
     resetInactivityTimer();  });
   
   // Click/touch events for screensaver mode
-  document.addEventListener('click', () => {
+  document.addEventListener('click', (e) => {
     if (isScreensaverActive) {
+      // Check if the click is on the screensaver button
+      if (e.target.closest('#screensaver-btn')) {
+        return; // Let the button handle its own click
+      }
+      
       // Show controls temporarily
       body.classList.add('show-controls');
       
       // Hide the overlay message when controls are shown
       const overlay = document.querySelector('.screensaver-overlay');
-      overlay.style.display = 'none';
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
       
       resetInactivityTimer();
     }
   });
   
-  document.addEventListener('touchstart', () => {
+  document.addEventListener('touchstart', (e) => {
     if (isScreensaverActive) {
+      // Check if the touch is on the screensaver button
+      if (e.target.closest('#screensaver-btn')) {
+        return; // Let the button handle its own touch
+      }
+      
       // Show controls temporarily
       body.classList.add('show-controls');
       
       // Hide the overlay message when controls are shown
       const overlay = document.querySelector('.screensaver-overlay');
-      overlay.style.display = 'none';
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
       
       resetInactivityTimer();
     }
@@ -314,7 +368,11 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Detect mouse movement
   document.addEventListener('mousemove', () => {
-    resetInactivityTimer();
+    if (isScreensaverActive) {
+      resetInactivityTimer();
+    } else {
+      setScreensaverTimer();
+    }
   });
   // Add digital time display function
   function updateDigitalTime() {
@@ -454,6 +512,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     body.battery-saver #particles-js {
       display: none;
+    }
+    
+    /* Ensure screensaver button remains visible during screensaver mode */
+    body.screensaver-active #screensaver-btn {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      display: block !important;
+      z-index: 1001 !important;
     }
   `;
   document.head.appendChild(style);
