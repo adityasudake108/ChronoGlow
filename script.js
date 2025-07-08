@@ -172,19 +172,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-    // Screensaver functionality
+  // Screensaver functionality
   function activateScreensaver() {
     isScreensaverActive = true;
     body.classList.add('screensaver-active');
     requestWakeLock();
-    
+
     // Hide cursor after inactivity
     document.body.style.cursor = 'none';
-    
+
     // Show tap instructions briefly
     const overlay = document.querySelector('.screensaver-overlay');
     overlay.style.display = 'flex';
-    
+
+    // Hide controls immediately (remove any previously added show-controls class)
+    body.classList.remove('show-controls');
+
     // Update screensaver button
     screensaverBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
     screensaverBtn.title = 'Exit Screensaver Mode';
@@ -194,14 +197,14 @@ document.addEventListener('DOMContentLoaded', () => {
     isScreensaverActive = false;
     body.classList.remove('screensaver-active');
     releaseWakeLock();
-    
+
     // Show cursor
     document.body.style.cursor = '';
-    
+
     // Hide overlay
     const overlay = document.querySelector('.screensaver-overlay');
     overlay.style.display = 'none';
-    
+
     // Update screensaver button
     screensaverBtn.innerHTML = '<i class="fas fa-tv"></i>';
     screensaverBtn.title = 'Screensaver Mode';
@@ -218,6 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
       // Hide controls after 3 seconds of inactivity
       inactivityTimer = setTimeout(() => {
         document.body.style.cursor = 'none';
+        // Remove the show-controls class to hide the controls again
+        body.classList.remove('show-controls');
       }, 3000);
     }
   }
@@ -278,18 +283,31 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       activateScreensaver();
     }
-    resetInactivityTimer();
-  });
+    resetInactivityTimer();  });
   
   // Click/touch events for screensaver mode
   document.addEventListener('click', () => {
     if (isScreensaverActive) {
+      // Show controls temporarily
+      body.classList.add('show-controls');
+      
+      // Hide the overlay message when controls are shown
+      const overlay = document.querySelector('.screensaver-overlay');
+      overlay.style.display = 'none';
+      
       resetInactivityTimer();
     }
   });
   
   document.addEventListener('touchstart', () => {
     if (isScreensaverActive) {
+      // Show controls temporarily
+      body.classList.add('show-controls');
+      
+      // Hide the overlay message when controls are shown
+      const overlay = document.querySelector('.screensaver-overlay');
+      overlay.style.display = 'none';
+      
       resetInactivityTimer();
     }
   });

@@ -77,6 +77,17 @@ body.screensaver-active .battery-status.top-right {
   transition: opacity 0.8s;
 }
 
+<<<<<<< HEAD
+=======
+/* Show controls temporarily when show-controls class is added */
+body.screensaver-active.show-controls .controls-wrapper,
+body.screensaver-active.show-controls .footer,
+body.screensaver-active.show-controls .battery-status.top-right {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+>>>>>>> 6d0f673 (Initial commit for ClockProject)
 body.screensaver-active .screensaver-overlay {
   display: flex;
 }
@@ -395,6 +406,10 @@ input:checked + .slider:before {
   z-index: 100;
   opacity: 0;
   animation: fadeInOut 3s forwards;
+<<<<<<< HEAD
+=======
+  pointer-events: none; /* Make sure clicks pass through the overlay */
+>>>>>>> 6d0f673 (Initial commit for ClockProject)
 }
 
 .tap-instructions {
